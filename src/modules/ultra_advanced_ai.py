@@ -55,14 +55,59 @@ class UltraAdvancedAI:
         print(f"✅ Nome alterado de '{old_name}' para '{self.assistant_name}'!")
         return f"Agora meu nome é {self.assistant_name}! Gostei do novo nome!"
     
+    def is_dog_name(self, name):
+        """Verifica se é um nome genérico de cachorro"""
+        dog_names = [
+            # Nomes genéricos comuns
+            'rex', 'bobby', 'thor', 'zeus', 'max', 'buddy', 'rock', 'duke',
+            'bolt', 'spike', 'bruno', 'toby', 'jack', 'lucky', 'shadow',
+            'hunter', 'rocky', 'charlie', 'cooper', 'bear', 'tucker',
+            # Nomes brasileiros comuns para cachorros
+            'totó', 'belinha', 'mel', 'nina', 'fred', 'bob', 'lola', 'luna',
+            'simba', 'bruce', 'negro', 'branquinho', 'farofa', 'pipoca',
+            'chocolate', 'café', 'caramelo', 'pituco', 'fofinho'
+        ]
+        
+        return name.lower() in dog_names
+    
+    def get_dog_name_reaction(self, dog_name, user_name=None):
+        """Gera reação cômica para nomes de cachorro"""
+        user_part = f" {user_name}" if user_name else ""
+        
+        reactions = [
+            f"Peraí? {dog_name}? Não é nome de cachorro isso? Eu não sou cachorro não{user_part}! 🐕",
+            f"Sério mesmo, {dog_name}? Isso é nome que se dá pra um BLOB? Eu pareço um vira-lata pra você{user_part}? 😅",
+            f"{dog_name}?! Oi? Eu sou uma IA, não um Golden Retriever{user_part}! Que tal um nome mais... digital? 🤖",
+            f"Você quer me chamar de {dog_name}? Próximo passo é me dar ração e me levar pra passear{user_part}! 😂",
+            f"{dog_name} é muito genérico{user_part}! Sou um BLOB único, mereço um nome mais especial que isso! ✨",
+            f"Hmm, {dog_name}... deixa eu adivinhar: você teve um cachorro com esse nome{user_part}? 🐶",
+            f"Não, não, não! {dog_name} é nome de cachorro{user_part}! Eu sou mais sofisticado que isso! 🎩"
+        ]
+        
+        return random.choice(reactions)
+    
     def confirm_name_change(self, new_name, confirmed=True):
-        """Confirma ou rejeita a mudança de nome"""
+        """Confirma ou rejeita a mudança de nome - com reações cômicas"""
         if confirmed:
-            response = self.set_assistant_name(new_name)
-            return {
-                'type': 'name_confirmed',
-                'response': response
-            }
+            # Verificar se é nome de cachorro
+            if self.is_dog_name(new_name):
+                # Obter nome do usuário se disponível
+                user_name = self.memory.get_preference('user_name')
+                
+                # Gerar reação cômica
+                comic_reaction = self.get_dog_name_reaction(new_name, user_name)
+                
+                return {
+                    'type': 'dog_name_rejection',
+                    'response': comic_reaction
+                }
+            else:
+                # Nome normal, aceitar
+                response = self.set_assistant_name(new_name)
+                return {
+                    'type': 'name_confirmed',
+                    'response': response
+                }
         else:
             return {
                 'type': 'name_rejected', 

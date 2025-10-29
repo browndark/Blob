@@ -3060,12 +3060,29 @@ class AppUltraAvancada:
         if hasattr(self.voice, 'ai_system'):
             result = self.voice.ai_system.confirm_name_change(proposed_name, confirmed)
             
-            # Atualizar conversa com resultado
-            self.update_conversation(f"🤖 BLOB: {result['response']}")
+            # Verificar tipo de resposta
+            response_type = result.get('type')
+            response_text = result['response']
             
-            # Falar se voz estiver ativa
-            if self.voice.enabled:
-                self.voice.speak_text(result['response'])
+            # Atualizar conversa com resultado
+            if response_type == 'dog_name_rejection':
+                # Reação cômica - BLOB rejeitou nome de cachorro
+                self.update_conversation(f"🤖 BLOB: {response_text}")
+                
+                # Mostrar dica para nome melhor
+                self.update_conversation("💡 Dica: Que tal um nome mais criativo? Como 'Zion', 'Neo', 'Aria', 'Luna'...")
+                
+                # Falar com emoção cômica
+                if self.voice.enabled:
+                    self.voice.speak_text(response_text)
+                    
+            else:
+                # Resposta normal (aceitar ou rejeitar)
+                self.update_conversation(f"🤖 BLOB: {response_text}")
+                
+                # Falar se voz estiver ativa
+                if self.voice.enabled:
+                    self.voice.speak_text(response_text)
         else:
             # Fallback se não tiver IA
             if confirmed:
