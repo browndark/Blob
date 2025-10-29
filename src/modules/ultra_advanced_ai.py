@@ -68,7 +68,14 @@ class UltraAdvancedAI:
             'chocolate', 'café', 'caramelo', 'pituco', 'fofinho'
         ]
         
-        return name.lower() in dog_names
+        # Verificar nome base (sem extensões como Jr, II, etc)
+        name_base = name.lower().strip()
+        # Remover sufixos comuns
+        for suffix in [' jr', ' ii', ' iii', ' junior', ' segundo']:
+            if name_base.endswith(suffix):
+                name_base = name_base.replace(suffix, '').strip()
+        
+        return name_base in dog_names
     
     def get_dog_name_reaction(self, dog_name, user_name=None):
         """Gera reação cômica para nomes de cachorro"""
@@ -118,7 +125,7 @@ class UltraAdvancedAI:
         """Verifica se o usuário quer dar um nome para o BLOB"""
         input_lower = user_input.lower()
         
-        # Padrões para detectar mudança de nome
+        # Padrões para detectar mudança de nome - MELHORADOS
         name_patterns = [
             ('seu nome é', 'after'),
             ('nome é', 'after'),
@@ -132,7 +139,17 @@ class UltraAdvancedAI:
             ('agora se chama', 'after'),
             ('se chama', 'after'),
             ('seu novo nome é', 'after'),
-            ('novo nome é', 'after')
+            ('novo nome é', 'after'),
+            # Padrões adicionais para 100%
+            ('quero que você se chame', 'after'),
+            ('gostaria de te chamar de', 'after'),
+            ('vou te dar o nome de', 'after'),
+            ('seu nome vai ser', 'after'),
+            ('você vai se chamar', 'after'),
+            ('te dou o nome', 'after'),
+            ('dou o nome', 'after'),
+            ('será chamado de', 'after'),
+            ('será chamada de', 'after')
         ]
         
         for pattern, position in name_patterns:
@@ -146,7 +163,10 @@ class UltraAdvancedAI:
                         words = name_part.split()
                         if words:
                             potential_name = words[0].strip('.,!?').title()
-                            if potential_name and len(potential_name) > 1 and potential_name.isalpha():
+                            # Validação melhorada para nomes
+                            if (potential_name and 
+                                len(potential_name) > 2 and  # Mínimo 3 caracteres
+                                potential_name.replace('-', '').replace(' ', '').isalpha()):  # Aceitar hífens e espaços
                                 # Retornar o nome para confirmação (não alterar ainda)
                                 return {
                                     'type': 'name_change_request',
