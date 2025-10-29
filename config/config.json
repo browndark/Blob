@@ -1,0 +1,84 @@
+{
+  "blob_config": {
+    "version": "2.0.0",
+    "debug": false,
+    "log_level": "INFO",
+    "database": {
+      "path": "data/blob_memory.db",
+      "backup_enabled": true,
+      "backup_interval_hours": 24
+    },
+    "voice": {
+      "enabled": true,
+      "voice_type": "female",
+      "voice_id": "Microsoft Maria Desktop - Portuguese(Brazil)",
+      "volume": 80,
+      "rate": 2,
+      "pitch": 5,
+      "voice_options": {
+        "female": {
+          "name": "Microsoft Maria Desktop - Portuguese(Brazil)",
+          "voice_id": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_PT-BR_MARIA_11.0",
+          "display_name": "Feminino"
+        }
+      },
+      "fallback_voices": [
+        "Microsoft Maria Desktop"
+      ]
+    },
+    "personality": {
+      "learning_rate": 0.1,
+      "emotion_persistence": 0.8,
+      "relationship_growth_rate": 0.05,
+      "memory_retention_days": 365
+    },
+    "advanced_ai": {
+      "enabled": true,
+      "intelligence_level": "ultra_advanced",
+      "learning_enabled": true,
+      "context_analysis": true,
+      "predictive_responses": true,
+      "emotional_intelligence": true,
+      "knowledge_base": {
+        "auto_update": true,
+        "max_knowledge_entries": 10000,
+        "learning_threshold": 0.7
+      },
+      "reasoning": {
+        "logical_chains": true,
+        "pattern_recognition": true,
+        "creative_thinking": true,
+        "problem_solving": true
+      },
+      "adaptive_behavior": {
+        "personality_evolution": true,
+        "conversation_style_adaptation": true,
+        "interest_tracking": true,
+        "mood_prediction": true
+      }
+    },
+    "search": {
+      "enabled": true,
+      "timeout_seconds": 10,
+      "max_results": 5,
+      "preferred_language": "pt"
+    },
+    "ui": {
+      "theme": "light",
+      "brightness": 90,
+      "window_size": {
+        "width": 800,
+        "height": 600
+      },
+      "animation_speed": 50,
+      "show_debug_info": false,
+      "font_size": 14,
+      "show_config_button": true
+    },
+    "security": {
+      "data_encryption": false,
+      "secure_memory": true,
+      "auto_logout_minutes": 0
+    }
+  }
+}

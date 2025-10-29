@@ -1,0 +1,16 @@
+{
+  "voice_id": "male_alternative",
+  "name": "BLOB Masculino (Efeitos)",
+  "base_voice": "Microsoft Maria Desktop - Portuguese(Brazil)",
+  "type": "male",
+  "language": "pt-br",
+  "quality": "modified",
+  "effects": {
+    "pitch_shift": -8,
+    "speed_factor": 0.85,
+    "bass_boost": 1.3,
+    "treble_cut": 0.7
+  },
+  "description": "Voz masculina criada com efeitos sobre voz feminina",
+  "status": "ready"
+}

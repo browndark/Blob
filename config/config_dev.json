@@ -1,0 +1,48 @@
+{
+  "blob_config": {
+    "version": "2.0.0-dev",
+    "debug": true,
+    "log_level": "DEBUG",
+    "database": {
+      "path": "data/blob_memory_dev.db",
+      "backup_enabled": false,
+      "backup_interval_hours": 1
+    },
+    "voice": {
+      "enabled": true,
+      "voice_id": "Microsoft Maria Desktop - Portuguese(Brazil)",
+      "volume": 60,
+      "rate": 0,
+      "fallback_voices": [
+        "Microsoft David Desktop",
+        "Microsoft Zira Desktop"
+      ]
+    },
+    "personality": {
+      "learning_rate": 0.2,
+      "emotion_persistence": 0.5,
+      "relationship_growth_rate": 0.1,
+      "memory_retention_days": 30
+    },
+    "search": {
+      "enabled": true,
+      "timeout_seconds": 5,
+      "max_results": 3,
+      "preferred_language": "pt"
+    },
+    "ui": {
+      "theme": "dark",
+      "window_size": {
+        "width": 1000,
+        "height": 800
+      },
+      "animation_speed": 20,
+      "show_debug_info": true
+    },
+    "security": {
+      "data_encryption": false,
+      "secure_memory": false,
+      "auto_logout_minutes": 0
+    }
+  }
+}
