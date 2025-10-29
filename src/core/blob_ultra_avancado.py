@@ -1727,6 +1727,14 @@ class VozUltraAvancada:
                 # Processar com IA ultra avançada
                 ultra_response = self.ultra_ai.process_input(text, context)
                 
+                # Verificar se é uma solicitação de confirmação de nome
+                if isinstance(ultra_response, dict):
+                    if ultra_response.get('type') == 'name_change_request':
+                        # Mostrar botões de confirmação na interface
+                        if hasattr(self.app, 'handle_ai_response'):
+                            self.app.handle_ai_response(ultra_response)
+                        return
+                
                 # Verificar se houve evolução de inteligência
                 ai_status = self.ultra_ai.get_ai_status()
                 
@@ -2619,6 +2627,10 @@ class AppUltraAvancada:
         # Sistema de voz ultra avançado
         self.voice = VozUltraAvancada(self.blob, self, self.memory_db, self.emotional_ai)
         
+        # Referência ao sistema de IA para confirmação de nomes
+        if hasattr(self.voice, 'ultra_ai'):
+            self.voice.ai_system = self.voice.ultra_ai
+        
         # Interface moderna
         self.setup_modern_ui()
         self.setup_advanced_panels()
@@ -2984,6 +2996,99 @@ class AppUltraAvancada:
                     self.data_labels[key].config(text=f"{key}: {value}")
         except:
             pass
+    
+    def show_name_confirmation(self, proposed_name, ai_response):
+        """Mostra botões de confirmação para mudança de nome"""
+        # Criar frame de confirmação
+        self.confirmation_frame = tk.Frame(self.root, bg='#0D1117')
+        self.confirmation_frame.pack(pady=20)
+        
+        # Título da confirmação
+        tk.Label(
+            self.confirmation_frame,
+            text=ai_response,
+            font=('Consolas', 14, 'bold'),
+            bg='#0D1117', fg='#F85149'
+        ).pack(pady=10)
+        
+        # Frame para botões
+        buttons_frame = tk.Frame(self.confirmation_frame, bg='#0D1117')
+        buttons_frame.pack()
+        
+        # Botão SIM
+        yes_button = tk.Button(
+            buttons_frame,
+            text="✅ SIM",
+            font=('Consolas', 12, 'bold'),
+            bg='#238636', fg='white',
+            width=10, height=2,
+            relief='flat', bd=0,
+            command=lambda: self.confirm_name_change(proposed_name, True),
+            cursor='hand2'
+        )
+        yes_button.pack(side='left', padx=10)
+        
+        # Botão NÃO
+        no_button = tk.Button(
+            buttons_frame,
+            text="❌ NÃO",
+            font=('Consolas', 12, 'bold'),
+            bg='#DA3633', fg='white',
+            width=10, height=2,
+            relief='flat', bd=0,
+            command=lambda: self.confirm_name_change(proposed_name, False),
+            cursor='hand2'
+        )
+        no_button.pack(side='left', padx=10)
+        
+        # Texto explicativo
+        tk.Label(
+            self.confirmation_frame,
+            text=f"Seu BLOB vai se chamar {proposed_name}?",
+            font=('Consolas', 10),
+            bg='#0D1117', fg='#7D8590'
+        ).pack(pady=5)
+    
+    def confirm_name_change(self, proposed_name, confirmed):
+        """Confirma ou rejeita mudança de nome"""
+        # Remover frame de confirmação
+        if hasattr(self, 'confirmation_frame'):
+            self.confirmation_frame.destroy()
+            delattr(self, 'confirmation_frame')
+        
+        # Processar confirmação através da IA
+        if hasattr(self.voice, 'ai_system'):
+            result = self.voice.ai_system.confirm_name_change(proposed_name, confirmed)
+            
+            # Atualizar conversa com resultado
+            self.update_conversation(f"🤖 BLOB: {result['response']}")
+            
+            # Falar se voz estiver ativa
+            if self.voice.enabled:
+                self.voice.speak_text(result['response'])
+        else:
+            # Fallback se não tiver IA
+            if confirmed:
+                response = f"Agora meu nome é {proposed_name}! Gostei do novo nome!"
+            else:
+                response = "Entendi! Continuo sendo um BLOB sem nome específico."
+            
+            self.update_conversation(f"🤖 BLOB: {response}")
+            
+            if self.voice.enabled:
+                self.voice.speak_text(response)
+    
+    def handle_ai_response(self, ai_response):
+        """Manipula resposta da IA verificando se é solicitação de nome"""
+        if isinstance(ai_response, dict):
+            if ai_response.get('type') == 'name_change_request':
+                # Mostrar confirmação de nome
+                self.show_name_confirmation(
+                    ai_response['new_name'], 
+                    ai_response['response']
+                )
+                return True
+        return False
     
     def run(self):
         """Executa a aplicação ultra avançada"""

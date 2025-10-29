@@ -55,8 +55,22 @@ class UltraAdvancedAI:
         print(f"✅ Nome alterado de '{old_name}' para '{self.assistant_name}'!")
         return f"Agora meu nome é {self.assistant_name}! Gostei do novo nome!"
     
+    def confirm_name_change(self, new_name, confirmed=True):
+        """Confirma ou rejeita a mudança de nome"""
+        if confirmed:
+            response = self.set_assistant_name(new_name)
+            return {
+                'type': 'name_confirmed',
+                'response': response
+            }
+        else:
+            return {
+                'type': 'name_rejected', 
+                'response': f"Entendi! Continuo sendo um BLOB sem nome específico. Você pode me dar um nome quando quiser!"
+            }
+    
     def check_name_change_request(self, user_input):
-        """Verifica se o usuário quer trocar o nome"""
+        """Verifica se o usuário quer dar um nome para o BLOB"""
         input_lower = user_input.lower()
         
         # Padrões para detectar mudança de nome
@@ -88,7 +102,12 @@ class UltraAdvancedAI:
                         if words:
                             potential_name = words[0].strip('.,!?').title()
                             if potential_name and len(potential_name) > 1 and potential_name.isalpha():
-                                return self.set_assistant_name(potential_name)
+                                # Retornar o nome para confirmação (não alterar ainda)
+                                return {
+                                    'type': 'name_change_request',
+                                    'new_name': potential_name,
+                                    'response': f"O meu nome é {potential_name}?"
+                                }
         
         return None
     
@@ -121,7 +140,7 @@ class UltraAdvancedAI:
         """Processa entrada do usuário com IA ultra avançada"""
         start_time = time.time()
         
-        # Verificar se o usuário quer trocar o nome
+        # Verificar se o usuário quer dar um nome para o BLOB
         name_change_response = self.check_name_change_request(user_input)
         if name_change_response:
             return name_change_response
@@ -162,6 +181,7 @@ class UltraAdvancedAI:
         # Evoluir inteligência
         self._evolve_intelligence()
         
+        # Retornar resposta padrão (string) para compatibilidade
         return creative_response
     
     def _load_user_profile(self):
